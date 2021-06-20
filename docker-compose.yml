@@ -1,0 +1,36 @@
+version: '3.5'
+
+x-services-volume:
+  &share-volume
+  type: bind
+  source: ./redshark_H5
+  target: /opt/app
+
+services:
+  redshark.nutx-h5-client:
+    image: node:14.17.1-alpine3.11-modify
+    container_name: redshark.nutx-h5-client
+    command: ["/bin/bash", "/opt/conf/function.sh"]
+    #command: [nginx-debug, '-g', 'daemon off;']
+    #restart: always
+    volumes:
+      - *share-volume
+      - ./startup:/opt/conf
+      #- ./nginx-config-d:/etc/nginx/templates
+    working_dir: /opt/app
+    cap_add:
+      - SYS_TIME
+      - SYS_NICE
+
+   # environment:
+      #- NGINX_HOST=foobar.com
+   #   - NGINX_PORT=80
+      #- NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
+      #- NGINX_ENVSUBST_TEMPLATE_SUFFIX=.template
+      #- NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/conf.d
+    ports:
+      - 8052:3005
+networks:
+  default:
+    external:
+      name: redshark-bridge
