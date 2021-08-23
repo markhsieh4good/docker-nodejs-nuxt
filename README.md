@@ -1,2 +1,2 @@
 # docker-nodejs-nuxt
-用來運作紅鯊專案的H5 web
+用來運作node nuxt 的 web-server
